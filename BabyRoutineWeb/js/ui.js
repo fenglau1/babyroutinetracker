@@ -240,3 +240,7 @@ const UI = {
         this.renderFullHistory(tab);
     }
 };
+
+// Alias for HTML onclick handlers
+const ui = UI;
+

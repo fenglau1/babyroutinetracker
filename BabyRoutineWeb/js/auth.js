@@ -7,6 +7,11 @@ const Auth = {
     user: null,
 
     init() {
+        if (!auth) {
+            console.warn("Auth not initialized - Firebase not configured");
+            return;
+        }
+
         auth.onAuthStateChanged(user => {
             this.user = user;
             this.updateUI();
@@ -20,6 +25,11 @@ const Auth = {
     },
 
     login() {
+        if (!auth) {
+            alert("Firebase not configured. Please update firebase-config.js with your Firebase credentials.");
+            return;
+        }
+
         const provider = new firebase.auth.GoogleAuthProvider();
         auth.signInWithPopup(provider)
             .then((result) => {
@@ -31,6 +41,8 @@ const Auth = {
     },
 
     logout() {
+        if (!auth) return;
+
         auth.signOut().then(() => {
             // Sign-out successful.
             // Optional: Clear local data or keep it? 

@@ -20,6 +20,19 @@ const app = {
             Charts.render();
         };
 
+        // Add Baby button
+        document.getElementById('add-baby-btn').onclick = () => {
+            const name = prompt("Enter baby's name:");
+            if (name) {
+                Store.createDefaultBaby();
+                const baby = Store.getCurrentBaby();
+                baby.name = name;
+                Store.save();
+                UI.renderBabyProfile();
+                alert(`Baby "${name}" added!`);
+            }
+        };
+
         // Menu button is now handled inline in HTML or we can add listener here if we removed onclick
         // document.getElementById('menu-btn').onclick = () => { this.toggleSidebar(); };
     },

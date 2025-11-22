@@ -190,7 +190,7 @@ const Store = {
 
     // Sync Logic
     async syncData() {
-        if (!Auth.user) return;
+        if (!Auth.user || !db) return;
 
         const userRef = db.collection('users').doc(Auth.user.uid);
 
@@ -203,12 +203,6 @@ const Store = {
                 // For a robust sync, we'd need timestamps on modification.
                 // Let's assume remote is truth for now if it exists.
                 if (remoteData.babies) {
-                    this.state.babies = JSON.parse(remoteData.babies); // Stored as string to preserve structure or just object
-                    // Actually firestore stores objects.
-                    // But we need to handle Dates.
-                    // Let's assume we store as JSON string to avoid mapping issues or store as object.
-                    // If stored as object, we need to re-hydrate dates.
-                    // Let's try to store as object.
                     this.state.babies = remoteData.babies;
                     this.hydrateDates();
                     this.save(false); // Save to local but don't sync back immediately to avoid loop
@@ -227,7 +221,7 @@ const Store = {
     save(syncToCloud = true) {
         localStorage.setItem('babyRoutineData', JSON.stringify(this.state));
 
-        if (syncToCloud && Auth.user) {
+        if (syncToCloud && Auth.user && db) {
             // Push to Firestore
             // We convert dates to ISO strings or Timestamps? 
             // JSON.stringify handles dates as ISO strings.
